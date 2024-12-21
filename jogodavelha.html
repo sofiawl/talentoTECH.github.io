@@ -1,0 +1,73 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Jogo da Velha',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: TicTacToePage(),
+    );
+  }
+}
+
+class TicTacToePage extends StatefulWidget {
+  @override
+  _TicTacToePageState createState() => _TicTacToePageState();
+}
+
+class _TicTacToePageState extends State<TicTacToePage> {
+  List<String> board = List.generate(9, (_) => '');
+  String currentPlayer = 'X';
+  String winner = '';
+
+  void _handleTap(int index) {
+    if (board[index] == '' && winner == '') {
+      setState(() {
+        board[index] = currentPlayer;
+        if (_checkWinner()) {
+          winner = currentPlayer;
+        } else {
+          currentPlayer = currentPlayer == 'X' ? 'O' : 'X';
+        }
+      });
+    }
+  }
+
+  bool _checkWinner() {
+    const winPatterns = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6]
+    ];
+    for (var pattern in winPatterns) {
+      if (board[pattern[0]] != '' &&
+          board[pattern[0]] == board[pattern[1]] &&
+          board[pattern[0]] == board[pattern[2]]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void _resetGame() {
+    setState(() {
+      board = List.generate(9, (_) => '');
+      winner = '';
+      currentPlayer = 'X';
+    });
+  }
+
+  Widget _buildBoard() {
+    return GridV
